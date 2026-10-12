@@ -1,0 +1,6 @@
+/* One floating gesture surface: no permanent left/right touch partitions. */
+.live-controls[data-control-layout="onehand"] .live-touch-zones{grid-template-columns:1fr}
+.live-controls[data-control-layout="onehand"] .touch-zone-jump{display:none}
+.live-controls[data-control-layout="onehand"] .touch-zone-move{width:100%;border:0;border-radius:22px}
+.live-controls[data-control-layout="onehand"] .touch-zone-move span{max-width:280px;text-align:center}
+.live-controls[data-control-layout="onehand"] .live-jump-touch{pointer-events:none}

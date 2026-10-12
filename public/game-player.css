@@ -1,0 +1,112 @@
+/* One focused stage: the scene owns the space, status floats over it. */
+@media (min-width:768px) and (pointer:fine) and (min-height:501px){
+ #game-player,#preview-player{width:min(1320px,calc(100vw - 64px));height:min(900px,calc(100dvh - 48px));max-height:calc(100dvh - 48px);background:#10243a;border:1px solid #ffffff26;border-radius:22px;box-shadow:0 32px 100px #03101bb3;isolation:isolate}
+ #game-player::backdrop,#preview-player::backdrop{background:#06101de0;backdrop-filter:blur(8px)}
+ #game-player .game-player-header,#preview-player .preview-player-header{min-height:64px;padding:10px 20px;gap:20px;background:#10243a;border-bottom:1px solid #ffffff16;flex:none}
+ #game-player-title,#preview-player-title{min-width:0;overflow-wrap:anywhere;color:#fff;font-size:20px;line-height:1.35;letter-spacing:-.4px}
+ #game-player .game-player-header strong::before,#preview-player .preview-player-header strong::before{content:'';display:inline-block;width:9px;height:9px;background:#ffce42;border-radius:50%;margin-right:12px;vertical-align:2px}
+ :root body #game-player #game-player-close,:root body #preview-player #preview-exit{min-height:44px;flex:none;padding:10px 16px;border:1px solid #ffffff35;border-radius:12px;background:#203950;color:#e8f0f7;font-size:14px;box-shadow:none}
+ #game-player-slot,#preview-arena-slot{position:relative;flex:1;min-height:0;display:flex}
+ #game-player #arena,#preview-player #arena{position:relative;display:flex;flex-direction:column;flex:1;min-width:0;min-height:0;padding:0;background:#0c2035;border:0;box-shadow:none}
+ #game-player #arena .arena-heading,#preview-player #arena .arena-heading,#game-player #arena .race-commentary,#preview-player #arena .race-commentary,#game-player #arena .arena-bottom,#preview-player #arena .arena-bottom{display:none}
+ #game-player #arena .track-wrap,#preview-player #arena .track-wrap{position:relative;flex:1;min-height:0;height:auto;margin:0;border-radius:0}
+ #game-player #arena .arena-top,#preview-player #arena .arena-top{position:absolute;top:16px;right:16px;z-index:15;display:flex;margin:0;padding:0;border:0;min-height:0;background:none;pointer-events:none}
+ #game-player #arena .arena-top>:not(#sound),#preview-player #arena .arena-top>:not(#sound){display:none}
+ #game-player #sound,#preview-player #sound{pointer-events:auto;min-height:44px;min-width:64px;background:#10273ddd;border-color:#ffffff55;backdrop-filter:blur(8px)}
+ #game-player #arena .race-hud,#preview-player #arena .race-hud{position:absolute;z-index:14;top:16px;left:16px;right:auto;margin:0;padding:10px 14px;display:flex;gap:16px;align-items:center;height:auto;max-width:calc(100% - 120px);border:1px solid #ffffff30;border-radius:12px;background:#10273ddd;color:#fff;pointer-events:none;backdrop-filter:blur(8px)}
+ #game-player .signal-lights,#preview-player .signal-lights{display:none}
+ #game-player #arena #stage-chip,#preview-player #arena #stage-chip{font-size:13px;letter-spacing:.3px}
+ #game-player #arena #race-clock,#preview-player #arena #race-clock{font-size:15px;font-variant-numeric:tabular-nums}
+ #game-player #arena #cheer,#preview-player #arena #cheer{top:auto;bottom:16px;right:16px}
+ #game-player #book-timer,#preview-player #book-timer{top:76px;left:16px;width:170px;padding:10px 12px}
+ #game-player #arena .leaderboard,#preview-player #arena .leaderboard{display:flex;flex:none;flex-wrap:nowrap;justify-content:flex-start;gap:8px;min-height:0;max-height:64px;margin:0;padding:10px 16px;overflow-x:auto;overflow-y:hidden;background:#10243a;border-top:1px solid #ffffff16;scrollbar-width:thin}
+ #game-player .leaderboard:empty,#preview-player .leaderboard:empty{display:none!important}
+ #game-player .leaderboard>span,#preview-player .leaderboard>span{flex:none;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:7px 11px;background:#1e374e;border:1px solid #ffffff1c;border-radius:9px;color:#eaf1f7;font-size:13px;line-height:1.4}
+ #game-player .leaderboard>span.eliminated,#preview-player .leaderboard>span.eliminated{opacity:.45}
+ #game-player .race-cinematic,#preview-player .race-cinematic{min-width:0;width:max-content;max-width:min(580px,calc(100% - 48px));padding:18px 28px;border:1px solid #ffcd42;border-radius:18px;background:#10273df5;box-shadow:0 12px 40px #05132465;overflow-wrap:anywhere;max-height:55%;overflow:auto}
+ #game-player .race-cinematic strong,#preview-player .race-cinematic strong{font-size:clamp(24px,3vw,38px);line-height:1.25;white-space:normal}
+ #game-player-finish:not([hidden]),#preview-finish:not([hidden]){position:relative;flex:none;display:flex;justify-content:center;gap:12px;padding:12px 20px 16px;background:#10243a;border-top:1px solid #ffffff16}
+ #game-player-finish button,#preview-finish button{min-height:48px;min-width:180px}
+ #game-player:has(#game-player-finish:not([hidden])) .race-cinematic,#preview-player:has(#preview-finish:not([hidden])) .race-cinematic{bottom:20px}
+}
+@media (max-width:767px), (pointer:coarse) and (max-width:1180px), (max-width:1000px) and (max-height:500px){
+ #game-player .race-cinematic,#preview-player .race-cinematic{min-width:0;max-width:calc(100% - 32px);overflow-wrap:anywhere}
+ #game-player #game-player-result,#preview-player #preview-finish button{white-space:normal;overflow-wrap:anywhere;min-width:0;line-height:1.3}
+ #game-player #arena .race-hud,#preview-player #arena .race-hud{min-width:0;flex-wrap:wrap;gap:4px 10px;overflow-wrap:anywhere}
+ #game-player #stage-chip,#preview-player #stage-chip{min-width:0}
+}
+/* The desktop canvas fills the dialog too; every control is an overlay. */
+@media (min-width:768px) and (pointer:fine) and (min-height:501px){
+ #game-player,#preview-player{height:94dvh;max-height:94dvh}
+ #game-player .game-player-header,#preview-player .preview-player-header{position:absolute;inset:0 0 auto;z-index:25;border:0;background:linear-gradient(#081b30e8,#081b3099,transparent);padding-bottom:20px;pointer-events:none}
+ #game-player .game-player-header button,#preview-player .preview-player-header button{pointer-events:auto}
+ #game-player-slot,#preview-arena-slot{position:absolute;inset:0;display:block}
+ #game-player #arena,#preview-player #arena{position:absolute;inset:0;display:block;width:100%;height:100%}
+ #game-player #arena .track-wrap,#preview-player #arena .track-wrap{position:absolute;inset:0;width:100%;height:100%;margin:0}
+ #game-player #arena .arena-top,#preview-player #arena .arena-top,#game-player #arena .race-hud,#preview-player #arena .race-hud{top:80px}
+ #game-player #arena #cheer,#preview-player #arena #cheer{top:auto;bottom:calc(env(safe-area-inset-bottom) + 20px)}
+ #game-player #book-timer,#preview-player #book-timer{top:140px}
+ #game-player #arena .leaderboard,#preview-player #arena .leaderboard{position:absolute;z-index:14;bottom:10px;left:12px;right:12px;width:auto;border:0;padding:8px;background:transparent;pointer-events:auto}
+ #game-player .leaderboard>span,#preview-player .leaderboard>span{background:#10273dd9;border-color:#ffffff38;backdrop-filter:blur(8px)}
+ #game-player .live-key-hint,#preview-player .live-key-hint{bottom:76px}
+ #game-player .race-cinematic,#preview-player .race-cinematic{bottom:80px}
+ #game-player-finish:not([hidden]),#preview-finish:not([hidden]){position:absolute;bottom:0;left:0;right:0;z-index:25;border:0;padding:18px 20px;background:linear-gradient(transparent,#081b30eb)}
+ #game-player:has(#game-player-finish:not([hidden])) .leaderboard,#preview-player:has(#preview-finish:not([hidden])) .leaderboard{display:none!important}
+ #game-player:has(#game-player-finish:not([hidden])) .race-cinematic,#preview-player:has(#preview-finish:not([hidden])) .race-cinematic{bottom:92px}
+}
+:root body #game-player #game-player-result,:root body #preview-player #preview-restart{background:#ffcf3d;color:#142a40;border:1px solid #e5b42b;border-radius:13px;box-shadow:0 3px 0 #ba8b16;font-weight:800}
+#game-player button:focus-visible,#preview-player button:focus-visible{outline:3px solid #ffcf3d;outline-offset:3px}
+.live-jump-touch{position:absolute;display:grid;place-items:center;width:72px;height:72px;transform:translate(-50%,-50%);border:2px solid #ffe898;border-radius:50%;background:#18314dcc;color:#ffe898;font-size:14px;font-weight:850;opacity:0;pointer-events:none;transition:opacity .12s;box-shadow:0 0 0 6px #ffcf3d25}
+.live-jump-touch.held{opacity:1;animation:jump-touch-pulse .75s ease-in-out infinite}
+@keyframes jump-touch-pulse{50%{box-shadow:0 0 0 10px #ffcf3d12}}
+@media(prefers-reduced-motion:reduce){.live-jump-touch.held{animation:none}}
+/* Touch hit areas stay visible without occupying space outside the game. */
+.live-touch-zones{display:none;position:absolute;inset:0;pointer-events:none}
+@media(pointer:coarse){
+ .live-touch-zones{display:grid;grid-template-columns:1fr 1fr}
+ .live-touch-zones>div{position:relative;min-width:0;background:linear-gradient(0deg,#d8efff12,transparent 60%);border:1px solid #ffffff12}
+ .live-touch-zones .touch-zone-jump{background:linear-gradient(0deg,#ffd43e15,transparent 60%);border-left:1px dashed #ffffff50}
+ .live-touch-zones>div>span{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 82px);left:50%;transform:translateX(-50%);display:block;width:max-content;max-width:calc(100% - 16px);padding:8px 12px;border:1px solid #ffffff35;border-radius:14px;background:#10273d35;color:#ffffffe0;text-align:center;font-size:15px;font-weight:800;line-height:1.35;text-shadow:0 1px 3px #071c36}
+ .live-touch-zones small{display:block;margin-top:2px;font-size:10px;font-weight:600;color:#ffffffb3}
+ .live-controls[data-control-layout=move] .touch-zone-jump,.live-controls[data-control-layout=jump] .touch-zone-move{display:none}
+ .live-controls:is([data-control-layout=move],[data-control-layout=jump]) .live-touch-zones{grid-template-columns:1fr}
+ .live-controls[data-control-layout=jump] .touch-zone-jump{border-left:0}
+}
+@media(pointer:coarse) and (max-height:500px){.live-touch-zones>div>span{bottom:calc(env(safe-area-inset-bottom) + 58px);padding:5px 12px}}
+/* Shake uses the whole playfield; the cue never intercepts a gesture. */
+.live-controls[data-control-layout=shake] .live-touch-zones{grid-template-columns:1fr}
+.live-controls[data-control-layout=shake] .touch-zone-jump{display:none}
+.live-controls[data-control-layout=shake] .touch-zone-move{background:radial-gradient(ellipse at center,#ffe89818,transparent 65%)}
+.live-controls[data-control-layout=shake] .touch-zone-move span{font-size:clamp(24px,6vw,36px);text-shadow:0 2px 10px #07172b}
+.live-controls[data-control-layout=shake] .touch-zone-move small{max-width:260px;margin:10px auto 0;line-height:1.5;font-size:14px}@media(pointer:coarse){
+ .live-controls[data-control-layout=boat] .live-touch-zones{grid-template-columns:1fr}
+ .live-controls[data-control-layout=boat] .touch-zone-jump{display:none}
+ .live-controls[data-control-layout=boat] .touch-zone-move{border:0;background:linear-gradient(0deg,#bdeaff09,transparent 35%)}
+ .live-controls[data-control-layout=boat] .touch-zone-move>span{background:#10273d50;border-color:#ffffff20;font-size:14px;max-width:calc(100% - 32px)}
+ .live-controls[data-control-layout=boat] .touch-zone-move small{font-size:12px;line-height:1.5}
+ .live-controls[data-control-layout=boat].gestured .live-touch-zones{opacity:0;transition:opacity .3s}
+}
+/* Mobile play chrome occupies one row; the scene remains touchable below it. */
+@media (max-width:767px), (pointer:coarse) and (max-width:1180px), (max-width:1000px) and (max-height:500px){
+ :is(#game-player,#preview-player)[open]{--play-top:calc(env(safe-area-inset-top) + 8px);--play-right:max(8px,env(safe-area-inset-right));--play-left:max(8px,env(safe-area-inset-left));--play-status-width:min(220px,calc(100% - var(--play-left) - var(--play-right) - 174px))}
+ :is(#game-player,#preview-player)[open] :is(.game-player-header,.preview-player-header){top:var(--play-top);right:var(--play-right);left:auto;min-height:44px;padding:0;background:none;border:0;gap:0}
+ :root body :is(#game-player,#preview-player)[open] :is(#game-player-close,#preview-exit){display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:80px;min-width:80px;height:44px;min-height:44px;margin:0;padding:0 8px;font-size:13px;line-height:1;white-space:nowrap;border-radius:12px;box-shadow:none}
+ :is(#game-player,#preview-player)[open] #arena .arena-top{inset:var(--play-top) calc(var(--play-right) + 86px) auto auto;display:flex;min-height:44px;width:80px;padding:0;gap:0}
+ :root body :is(#game-player,#preview-player)[open] #arena #sound{box-sizing:border-box;width:80px;min-width:80px;height:44px;min-height:44px;padding:0 6px;font-size:13px;white-space:nowrap;border-radius:12px}
+ :is(#game-player,#preview-player)[open] #arena .race-hud{top:var(--play-top);left:var(--play-left);width:var(--play-status-width);max-width:var(--play-status-width);min-height:44px;height:44px;box-sizing:border-box;flex-wrap:nowrap;gap:5px;padding:0 10px;overflow:hidden;border-radius:12px}
+ :is(#game-player,#preview-player)[open] #stage-chip{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;letter-spacing:0}
+ :is(#game-player,#preview-player)[open] #race-clock{display:none}
+ :is(#game-player,#preview-player)[open] #arena #book-timer{top:var(--play-top);left:var(--play-left);width:var(--play-status-width);max-width:var(--play-status-width);height:44px;box-sizing:border-box;padding:7px 10px;border-radius:12px;overflow:hidden}
+ :is(#game-player,#preview-player)[open] #book-timer-label{display:block;font-size:12px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ :is(#game-player,#preview-player)[open] .book-timer-track{height:4px;margin-top:5px}
+ :is(#game-player,#preview-player)[open]:has(#book-timer:not([hidden])) .race-hud{visibility:hidden}
+ :is(#game-player,#preview-player)[open] :is(#game-player-finish,#preview-finish):not([hidden]){gap:8px;padding:10px max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+ :root body :is(#game-player,#preview-player)[open] :is(#game-player-finish,#preview-finish) button{min-height:48px;box-sizing:border-box;line-height:1.3;font-size:15px;padding:10px 12px}
+ :is(#game-player,#preview-player)[open] .race-cinematic{max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 152px);overflow:auto;overscroll-behavior:contain}
+ :is(#game-player,#preview-player)[open]:has(:is(#game-player-finish,#preview-finish):not([hidden])) #cheer{display:none}
+}
+@media (max-height:500px) and (max-width:1180px){
+ :is(#game-player,#preview-player)[open] .race-cinematic{padding:10px 16px}
+ :is(#game-player,#preview-player)[open] .race-cinematic strong{font-size:24px;line-height:1.2}
+ :is(#game-player,#preview-player)[open] .race-cinematic small{font-size:12px}
+}

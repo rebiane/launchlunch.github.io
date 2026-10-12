@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+const {chromium}=await import(process.env.LAUNCHLUNCH_PLAYWRIGHT||'playwright');
+const browser=await chromium.launch({headless:true});const playMode=process.env.LAUNCHLUNCH_TEST_MODE||'auto';
+try{
+ const page=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.addInitScript(()=>{navigator.share=async payload=>{window.sharedParty=payload;};});
+ await page.goto(process.env.LAUNCHLUNCH_URL||'http://127.0.0.1:8787');await page.locator('#create-room').click();await page.locator('#connection.online').waitFor({state:'attached'});
+ assert.equal(await page.locator('#start').isVisible(),false);assert.equal(await page.locator('#mobile-primary').textContent(),'후보 모집 시작');
+ await page.locator('#invite').click();await page.locator('#share-dialog').waitFor();assert.match(await page.locator('#share-code').inputValue(),/^[a-f0-9]{20}$/);assert.ok((await page.locator('#share-url').inputValue()).includes('room='));await page.locator('#share-dialog [data-close]').click();
+ await page.locator('#settings').click();await page.locator('#locate').click();await page.locator('#address-dialog').waitFor({state:'visible'});await page.goBack();await page.locator('#address-dialog').waitFor({state:'hidden'});assert.equal(await page.locator('#settings-dialog').isVisible(),true);await page.goBack();await page.locator('#settings-dialog').waitFor({state:'hidden'});
+ await page.screenshot({path:'/private/tmp/lunchlaunch-app-lobby.png'});
+ await page.locator('#mobile-primary').click();await page.locator('#candidate-section').waitFor({state:'visible'});assert.equal(await page.locator('#mobile-primary').isDisabled(),true);
+ await page.locator('#mobile-add').click();await page.locator('#restaurant-dialog').waitFor({state:'visible'});assert.equal(await page.locator('#mobile-actions').isVisible(),false);
+ await page.goBack();await page.locator('#restaurant-dialog').waitFor({state:'hidden'});assert.equal(await page.locator('#candidate-section').isVisible(),true);
+ for(const name of ['모바일 국밥','모바일 초밥','모바일 파스타']){await page.locator('#mobile-add').click();await page.locator('[name=name]').fill(name);await page.locator('#restaurant-form .full').click();await page.waitForFunction(n=>[...document.querySelectorAll('.card-info strong')].some(x=>x.textContent===n),name);}
+ await page.screenshot({path:'/private/tmp/lunchlaunch-app-collecting.png'});assert.equal(await page.locator('#mobile-primary').isDisabled(),false);
+ await page.locator('#mobile-primary').click();await page.locator('#play-mode-panel').waitFor({state:'visible'});assert.equal(await page.locator('#mobile-step').textContent(),'3 / 6');await page.screenshot({path:'/private/tmp/lunchlaunch-app-mode.png'});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.locator(`[data-play-mode=${playMode}]`).click();await page.locator('#draft-panel').waitFor({state:'visible'});assert.match(await page.locator('#mobile-action-note').textContent(),/내 차례/);
+ for(let i=0;i<2;i++){const progress=await page.locator('#draft-progress').textContent();await page.locator('.draft-card:not([disabled])').first().click();await page.waitForFunction(p=>document.querySelector('#draft-panel').hidden||document.querySelector('#draft-progress').textContent!==p,progress);}
+ await page.locator('#game-choice-panel').waitFor({state:'visible'});assert.equal(await page.locator('#finalist-details').getAttribute('open'),null);await page.locator('#game-selector img').evaluateAll(images=>Promise.all(images.filter(image=>image.getBoundingClientRect().top<innerHeight).map(image=>image.decode().catch(()=>{}))));await page.screenshot({path:'/private/tmp/lunchlaunch-app-choosing.png'});await page.locator('#mode-island').click();await page.locator('#island-scene canvas').waitFor();
+ const rect=await page.locator('.track-wrap').boundingBox();assert.ok(rect.y>=0&&rect.y+rect.height<=844);assert.equal(await page.locator('#mobile-actions').isVisible(),false);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.screenshot({path:'/private/tmp/lunchlaunch-app-playing.png'});
+ assert.deepEqual(errors,[]);console.log('Mobile app flow: dock permissions, share, sheet/back, adding, ban/pick, choosing, viewport gameplay passed');
+}finally{await browser.close();}

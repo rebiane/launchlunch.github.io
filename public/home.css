@@ -1,0 +1,28 @@
+/* Home: one clear action, warm food colors, restrained surface details. */
+body:has(#home-screen:not([hidden])){background:#f7f4ec}
+body:has(#home-screen:not([hidden])) .app-window{background:radial-gradient(ellipse at 50% 38%,#fffdf7 0%,#f7f4ec 70%);box-shadow:none}
+body:has(#home-screen:not([hidden])) .topbar{background:transparent;color:#263b3b;border-bottom:1px solid #263b3b14;box-shadow:none;height:80px}
+body:has(#home-screen:not([hidden])) .logo{color:#263b3b;font-size:22px;letter-spacing:-1px}
+body:has(#home-screen:not([hidden])) .connection{color:#677771;font-size:13px}
+body:has(#home-screen:not([hidden])) footer{border-color:#263b3b14;color:#778078}
+#home-screen{max-width:700px;margin:48px auto 52px;gap:22px}
+#home-screen .party-label{color:#59694b;letter-spacing:2px;font-size:11px;background:#e8ecd9;padding:8px 13px;border-radius:20px;font-weight:800}
+#home-screen h1{color:#243b35;font-size:clamp(42px,5vw,62px);line-height:1.13;letter-spacing:-2.8px;font-weight:900}
+#home-screen>p{color:#69766d;font-size:18px;line-height:1.7;margin:0 0 4px}
+#home-screen .home-art{gap:15px;margin-bottom:10px;position:relative}
+#home-screen .home-art:before{content:'';position:absolute;inset:40% -5% -20%;background:radial-gradient(ellipse,#d9cba950,transparent 68%);filter:blur(12px)}
+#home-screen .home-art span{position:relative;width:92px;height:104px;border:1px solid #ffffffb0;border-radius:26px;font-size:57px;background:#f1e6c9;box-shadow:0 5px 0 #d8c9a7,0 14px 22px #59472c12;transform:rotate(-12deg)}
+#home-screen .home-art span:nth-child(2){width:125px;height:134px;font-size:77px;background:#f2bd35;box-shadow:0 6px 0 #bd8919,0 18px 28px #76551b20;transform:rotate(5deg);z-index:1}
+#home-screen .home-art span:last-child{background:#d9e5bc;box-shadow:0 5px 0 #b0c58f,0 14px 22px #38503012;transform:rotate(13deg)}
+#home-screen .home-create{display:flex;align-items:center;justify-content:space-between;gap:48px;width:320px;min-height:66px;padding:18px 24px;border:0;border-radius:18px;background:#dc4934;color:#fffdf6;font-size:21px;font-weight:800;box-shadow:0 4px 0 #a63226,0 10px 22px #a632261b;transition:background .15s,transform .15s,box-shadow .15s}
+#home-screen .home-create svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#home-screen .home-create:hover:not(:disabled){background:#c83d2b;transform:translateY(-2px);box-shadow:0 6px 0 #a63226,0 12px 24px #a6322624}
+#home-screen .home-create:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #a63226}
+#home-screen button:focus-visible{outline:3px solid #667448;outline-offset:5px}
+.home-secondary{display:flex;align-items:center;gap:0;margin-top:4px}
+#home-screen .home-secondary button{font-size:14px;font-weight:650;color:#59695e;padding:10px 16px;margin:0;border:0;background:none;border-radius:8px;min-height:44px}
+#home-screen .home-secondary button+button{border-left:1px solid #cdd4c4;border-radius:0 8px 8px 0}
+#home-screen .home-secondary button:hover{color:#243b35;background:#e9eddf}
+#home-screen .home-secondary span{margin-left:3px}
+@media(max-width:600px){body:has(#home-screen:not([hidden])) .topbar{height:68px}#home-screen{margin:32px auto 30px;gap:20px}#home-screen h1{letter-spacing:-2px}#home-screen>p{font-size:16px}#home-screen .home-art span{width:73px;height:83px;font-size:44px;border-radius:21px}#home-screen .home-art span:nth-child(2){width:103px;height:110px;font-size:63px}#home-screen .home-create{width:min(100%,320px);min-height:62px;font-size:20px}#home-screen .home-secondary button{font-size:13px;padding:10px 12px}}
+@media(prefers-reduced-motion:reduce){#home-screen .home-create{transition:none}}

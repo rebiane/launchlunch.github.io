@@ -1,0 +1,4 @@
+# Optional: NAVER Developers > Application > Search API
+# Copy this file to .dev.vars for local development. Never commit real keys.
+NAVER_CLIENT_ID=
+NAVER_CLIENT_SECRET=

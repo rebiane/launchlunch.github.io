@@ -1,0 +1,3 @@
+const {chromium}=await import(process.env.LAUNCHLUNCH_PLAYWRIGHT||'playwright');
+const browser=await chromium.launch({headless:true});
+try{const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:8787');await page.locator('#create-room').click();await page.locator('#connection.online').waitFor();await page.locator('#start').click();await page.locator('#search').click();await page.locator('#search-dialog[open]').waitFor({timeout:55000});console.log(JSON.stringify({searchConnected:true,restaurants:await page.locator('.search-result h3').allTextContents(),errors}));}finally{await browser.close();}

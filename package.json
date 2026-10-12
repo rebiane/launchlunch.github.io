@@ -1,0 +1,26 @@
+{
+  "name": "lunchlaunch",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "deploy": "wrangler deploy --config wrangler.production.jsonc",
+    "test:browser": "node test/browser.mjs",
+    "check": "node --check src/worker.js && node --check src/room.js && node --check public/app.js && node --test test/*.test.js",
+    "postinstall": "node scripts/vendor.mjs",
+    "predev": "node scripts/vendor.mjs",
+    "predeploy": "node scripts/vendor.mjs",
+    "build": "node scripts/vendor.mjs && node scripts/build.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.64.0",
+    "wrangler": "^4.0.0",
+    "esbuild": "0.28.2",
+    "sharp": "0.35.5"
+  },
+  "dependencies": {
+    "@cloudflare/playwright": "^1.3.6",
+    "three": "^0.186.1"
+  }
+}

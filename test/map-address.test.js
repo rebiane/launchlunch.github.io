@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {normalizeMapAddress,addressRowsToLocations} from '../src/map-address.js';
+const input={roadAddress:'서울특별시 중구 세종대로 110',jibunAddress:'서울특별시 중구 태평로1가 31',buildingName:'서울시청',sido:'서울특별시',sigungu:'중구',bname:'태평로1가'};
+const row={fullAddress:'서울 중구 세종대로 110',x:'126.978',y:'37.5665',addressElements:{sido:'서울',sigugun:'중구',roadName:'세종대로',buildNumber:'110',dongmyun:'태평로1가'}};
+const data=rows=>({address:{roadAddress:{list:rows}}});
+test('exact road address normalizes aliases and whitespace without an API key',()=>{assert.equal(normalizeMapAddress(input.roadAddress),normalizeMapAddress(row.fullAddress));assert.equal(addressRowsToLocations(data([row]),input)[0].name,'서울시청');});
+test('nearby or suffixed building numbers cannot be selected',()=>{assert.deepEqual(addressRowsToLocations(data([{...row,fullAddress:'서울 중구 세종대로 1100',addressElements:{}}]),input),[]);assert.deepEqual(addressRowsToLocations(data([row]),{roadAddress:'서울 중구 다른대로 110'}),[]);});
+test('ambiguous coordinates fail and identical repeated rows deduplicate',()=>{assert.deepEqual(addressRowsToLocations(data([row,{...row,x:'126.979'}]),input),[]);assert.equal(addressRowsToLocations(data([row,row]),input).length,1);});
+test('missing, blank, invalid and out-of-region coordinates fail',()=>{for(const x of [null,undefined,'',0,'bad',999])assert.deepEqual(addressRowsToLocations(data([{...row,x}]),input),[]);});
+test('structured road address and jibun-address exact matches are supported',()=>{assert.equal(addressRowsToLocations(data([{...row,fullAddress:undefined}]),input).length,1);assert.equal(addressRowsToLocations({address:{jibunsAddress:{list:[{...row,fullAddress:input.jibunAddress,isJibunAddress:true}]}}},input).length,1);});

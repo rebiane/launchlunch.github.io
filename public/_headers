@@ -1,0 +1,6 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(self)
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://t1.kakaocdn.net https://t1.daumcdn.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' ws: wss:; frame-src https://postcode.map.kakao.com https://postcode.map.daum.net http://postcode.map.kakao.com http://postcode.map.daum.net; frame-ancestors 'none'; base-uri 'none'; form-action 'self'

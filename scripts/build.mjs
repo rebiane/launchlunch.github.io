@@ -1,0 +1,21 @@
+import {build} from 'esbuild';
+import sharp from 'sharp';
+import {cp,mkdir,readFile,writeFile,rm,readdir,access} from 'node:fs/promises';
+import {resolve,relative} from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=fileURLToPath(new URL('../',import.meta.url)),source=resolve(root,'public'),out=resolve(root,'dist/public');
+await rm(out,{recursive:true,force:true});await mkdir(out,{recursive:true});
+await cp(source,out,{recursive:true,filter:path=>!path.endsWith('.js')&&!path.endsWith('.css')&&!path.includes('/assets/previews/')});
+const result=await build({entryPoints:[resolve(source,'app.js')],outdir:resolve(out,'build'),bundle:true,splitting:true,format:'esm',target:'es2022',minify:true,metafile:true,entryNames:'[name]-[hash]',chunkNames:'[name]-[hash]',legalComments:'linked'});
+const app=Object.entries(result.metafile.outputs).find(([,info])=>info.entryPoint===relative(root,resolve(source,'app.js'))||info.entryPoint===resolve(source,'app.js'));
+if(!app)throw Error('Missing browser entry');
+let html=await readFile(resolve(source,'index.html'),'utf8');html=html.replace('src="/app.js"',`src="/${relative(out,resolve(app[0])).replaceAll('\\','/')}"`);
+const css=await build({stdin:{contents:[...html.matchAll(/<link rel="stylesheet" href="\/([^"]+\.css)">/g)].map(([,name])=>`@import './${name}';`).join('\n'),resolveDir:source,loader:'css'},outfile:resolve(out,'build/styles.css'),bundle:true,minify:true,write:false});
+const {createHash}=await import('node:crypto');const stylesheet=css.outputFiles[0].contents,cssName=`styles-${createHash('sha256').update(stylesheet).digest('hex').slice(0,12)}.css`;await writeFile(resolve(out,'build',cssName),stylesheet);
+html=html.replace(/<link rel="stylesheet" href="\/[^"]+\.css">/g,'').replace('</head>',`<link rel="stylesheet" href="/build/${cssName}">\n</head>`);
+await mkdir(resolve(out,'assets/previews'),{recursive:true});
+let before=0,after=0;for(const name of await readdir(resolve(source,'assets/previews'))){if(!name.endsWith('.png'))continue;const buffer=await readFile(resolve(source,'assets/previews',name));const webp=await sharp(buffer).webp({quality:86,effort:5}).toBuffer();before+=buffer.length;after+=webp.length;await writeFile(resolve(out,'assets/previews',name.replace(/\.png$/,'.webp')),webp);html=html.replaceAll(`/assets/previews/${name}`,`/assets/previews/${name.replace(/\.png$/,'.webp')}`);}
+for(const [,path] of html.matchAll(/(?:src|href)="(\/[^"#?]*)"/g))await access(resolve(out,'.'+path));
+await writeFile(resolve(out,'index.html'),html);
+const headers=await readFile(resolve(source,'_headers'),'utf8');await writeFile(resolve(out,'_headers'),headers+'\n/build/*\n  Cache-Control: public, max-age=31536000, immutable\n');
+console.log(`Browser build: ${Object.keys(result.metafile.outputs).length} files; previews ${Math.round(before/1024)} → ${Math.round(after/1024)} KiB`);

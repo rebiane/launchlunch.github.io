@@ -1,0 +1,9 @@
+import assert from 'node:assert/strict';const {chromium}=await import(process.env.LAUNCHLUNCH_PLAYWRIGHT||'playwright');const browser=await chromium.launch({headless:true});
+try{const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ for(const [mode,title] of [['climb','막대 오르기'],['tricycle','쇼핑카트 레이스']]){
+  await page.goto('http://127.0.0.1:8787');await page.locator('#preview-open').click();const backgrounds=await page.locator('[data-mode]').evaluateAll(es=>es.map(e=>getComputedStyle(e).backgroundColor));assert.equal(new Set(backgrounds).size,1);await page.locator('#game-selector').screenshot({path:'/private/tmp/lunchlaunch-games-menu.png'});
+  await page.locator('#mode-'+mode).click();await page.locator('#demo').click();await page.locator('#sprint-scene canvas').waitFor();await page.waitForFunction(mode=>document.querySelector('#sprint-scene').dataset.mode===mode,mode);assert.equal(await page.locator('#arena-title').textContent(),title);assert.equal(await page.locator('#sprint-scene').getAttribute('data-character-count'),'6');
+  await page.waitForTimeout(11000);await page.locator('#arena').screenshot({path:'/private/tmp/lunchlaunch-'+mode+'.png'});await page.evaluate(()=>{const old=Date.now;Date.now=()=>old()+70000});await page.waitForFunction(()=>document.querySelector('#race-status').textContent==='경기 종료');const winner=await page.locator('#cinematic-title').textContent();assert.ok((await page.locator('#leaderboard>span').first().textContent()).includes(winner));console.log(mode+' finish passed');
+ }
+ await page.setViewportSize({width:390,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,errors}));
+}finally{await browser.close()}
